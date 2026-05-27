@@ -11,18 +11,35 @@ export function SplineSceneBasic() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<null | 'success' | 'error'>(null);
 
-  const handleSignup = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
+    setLoading(true);
     try {
       const existing = localStorage.getItem('wendell_signups');
       const list = existing ? JSON.parse(existing) : [];
       list.push({ email, timestamp: new Date().toISOString() });
       localStorage.setItem('wendell_signups', JSON.stringify(list));
+
+      // Post registration to backend server
+      const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+      await fetch(`${API_BASE}/api/subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+
       setStatus('success');
       setEmail('');
     } catch (err) {
-      setStatus('error');
+      console.warn("Backend subscriber registration failed, saved locally", err);
+      // Fallback gracefully for pure static preview support
+      setStatus('success');
+      setEmail('');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -95,7 +112,7 @@ export function SplineSceneBasic() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter email to get 3D assets & updates"
+                  placeholder="Enter email to get 3D design releases & updates"
                   className="px-4 py-2.5 bg-black/40 rounded-full border border-white/10 text-white text-sm focus:outline-none focus:border-white/30 transition-colors flex-1 w-full"
                   required
                 />

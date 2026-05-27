@@ -7,8 +7,8 @@ export function Navbar({
   currentPage = 'home',
   onNavigate 
 }: { 
-  currentPage?: 'home' | 'gallery' | 'assets';
-  onNavigate?: (page: 'home' | 'gallery' | 'assets') => void;
+  currentPage?: 'home' | 'gallery';
+  onNavigate?: (page: 'home' | 'gallery') => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -27,11 +27,6 @@ export function Navbar({
       e.preventDefault();
       if (onNavigate) {
         onNavigate('gallery');
-      }
-    } else if (item === '3D Assets') {
-      e.preventDefault();
-      if (onNavigate) {
-        onNavigate('assets');
       }
     } else if (item === 'Home') {
       e.preventDefault();
@@ -89,10 +84,9 @@ export function Navbar({
             {[
               ['Home', '#', 'home'], 
               ['3D Gallery', '#works', 'gallery'], 
-              ['3D Assets', '#assets', 'assets'],
               ['Contact', '#signup', 'home']
             ].map(([item, href, pageKey]) => {
-              const isActive = (pageKey === 'gallery' && currentPage === 'gallery') || (pageKey === 'assets' && currentPage === 'assets') || (pageKey === 'home' && currentPage === 'home' && item !== 'Contact');
+              const isActive = (pageKey === 'gallery' && currentPage === 'gallery') || (pageKey === 'home' && currentPage === 'home' && item !== 'Contact');
               return (
                 <a 
                   key={item} 
@@ -136,7 +130,6 @@ export function Navbar({
             {[
               ['Home', '#'], 
               ['3D Gallery', '#works'], 
-              ['3D Assets', '#assets'],
               ['Contact', '#signup']
             ].map(([item, href], i) => (
               <motion.a 

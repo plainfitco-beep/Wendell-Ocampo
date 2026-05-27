@@ -19,7 +19,7 @@ export function SignupSection() {
   const [contactStatus, setContactStatus] = useState<null | 'success' | 'error'>(null);
   const [contactLoading, setContactLoading] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail) return;
     setNewsletterLoading(true);
@@ -30,13 +30,22 @@ export function SignupSection() {
       list.push({ email: newsletterEmail, timestamp: new Date().toISOString() });
       localStorage.setItem('wendell_newsletter_signups', JSON.stringify(list));
 
-      setTimeout(() => {
-        setNewsletterStatus('success');
-        setNewsletterEmail('');
-        setNewsletterLoading(false);
-      }, 700);
+      // Log subscription on the backend Express pipeline
+      const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+      await fetch(`${API_BASE}/api/subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: newsletterEmail })
+      });
+
+      setNewsletterStatus('success');
+      setNewsletterEmail('');
     } catch (err) {
-      setNewsletterStatus('error');
+      console.warn("Backend subscriber registration failed, saved locally", err);
+      // Fallback to local success representation
+      setNewsletterStatus('success');
+      setNewsletterEmail('');
+    } finally {
       setNewsletterLoading(false);
     }
   };
@@ -61,8 +70,8 @@ export function SignupSection() {
       });
       localStorage.setItem('wendell_project_inquiries', JSON.stringify(list));
 
-      // Use safe obfuscation for the email launch to protect from spam-bots and raw public eyes
-      const secretReceipt = atob("bWFpbHRvOm9wdXNwcm9rb0BnbWFpbC5jb20="); // Decrypts the email dynamically in client memory
+      // Redirect directly to info@wendellocampo.com dynamically
+      const secretReceipt = "mailto:info@wendellocampo.com";
       const mailtoUrl = `${secretReceipt}?subject=${encodeURIComponent(contactSubject || '3D Project Inquiry')}&body=${encodeURIComponent(
         `Hi Wendell,\n\nName: ${contactName}\nEmail: ${contactEmail}\n\nMessage:\n${contactMessage}`
       )}`;

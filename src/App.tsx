@@ -11,10 +11,9 @@ import { GallerySection } from "@/components/ui/gallery-section";
 import { SignupSection } from "@/components/ui/signup-section";
 import { Footer } from "@/components/ui/footer-section";
 import { ThreeDGalleryPage } from "@/components/ui/three-d-gallery";
-import { AssetsPage } from "@/components/ui/assets-page";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'gallery' | 'assets'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'gallery'>('home');
 
   // Automatically scroll to top on page switches to keep experience fluid
   useEffect(() => {
@@ -35,10 +34,6 @@ export default function App() {
         <div className="w-full pt-28 md:pt-36 relative z-10 flex-1">
           <ThreeDGalleryPage onBack={() => setCurrentPage('home')} />
         </div>
-      ) : currentPage === 'assets' ? (
-        <div className="w-full pt-28 md:pt-36 relative z-10 flex-1">
-          <AssetsPage />
-        </div>
       ) : (
         <main className="w-full flex flex-col items-center relative z-10">
           <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-40 md:pb-24">
@@ -46,7 +41,7 @@ export default function App() {
           </div>
           
           <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-            <DemoOne onEnterAssets={() => setCurrentPage('assets')} />
+            <DemoOne />
           </div>
 
           <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
