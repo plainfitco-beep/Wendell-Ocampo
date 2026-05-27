@@ -17,6 +17,7 @@ import parametricFluidD5Url from "@/assets/images/parametric_fluid_pavilion.png"
 import terrazzoKitchenD5Url from "@/assets/images/terrazzo_kitchen.png";
 import soundSphereD5Url from "@/assets/images/sound_sphere.png";
 import spatioTowerRenderUrl from "@/assets/images/spatio_tower_render.png";
+import luminousTimepieceD5Url from "@/assets/images/luminous_timepiece.png";
 
 interface GalleryItem {
   id: string;
@@ -99,10 +100,10 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
   },
   {
     id: 'product-2',
-    title: 'Solfeggio Sound Sphere',
+    title: 'Helios Luminous Timepiece',
     category: 'Product Design',
-    description: 'An architectural table accessory with dual-chamber sonic sound modules, wrapped in acoustically transparent polymer meshes.',
-    imageUrl: soundSphereD5Url,
+    description: 'A luxury home companion featuring a glass projection ring floating magnetically above a round absolute-black granite base. Soft volumetric golden light emits from the inner rim.',
+    imageUrl: luminousTimepieceD5Url,
     resolution: '4K Studio Macro',
     engine: 'D5 Render v3.8 Pro',
     cameraSettings: 'Focal Length: 85mm, F/2.8, ISO 100',
@@ -110,10 +111,10 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
   },
   {
     id: 'video-2',
-    title: 'Solfeggio Sound Sphere Commercial Reel',
+    title: 'Helios Luminous Timepiece Commercial Reel',
     category: 'Marketing Videos',
-    description: 'A bespoke premium advertising spot showcasing dual-chamber internal acoustic design layers, with polished macros and synchronized post-processing audio accents.',
-    imageUrl: soundSphereD5Url,
+    description: 'A bespoke premium cinematic advertisement detailing the precision magnetic levitation mechanism, gold-plated internal induction coil layers, and soft-glowing volumetric lighting.',
+    imageUrl: luminousTimepieceD5Url,
     resolution: '4K Commercial (30 FPS)',
     engine: 'D5 Render / DaVinci Resolve',
     cameraSettings: 'Orbit Path, Lens: 85mm Prime, F/2.8',

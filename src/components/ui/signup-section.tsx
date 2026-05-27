@@ -150,7 +150,7 @@ export function SignupSection() {
           
           <p className="text-neutral-400 mt-4 text-sm md:text-base max-w-xl mx-auto font-light leading-relaxed">
             {activeTab === 'contact' ? (
-              "Submit your architectural vision, interior landscape, or custom product concept. We construct secure pipeline renders and immersive virtual assets in minutes."
+              "Submit your architectural vision, interior landscape, or custom product concept. We construct secure pipeline renders and immersive virtual assets."
             ) : (
               "Subscribe to receive ultra-high-resolution visualization showcases, real D5 Render presets, and exclusive personal studio updates directly in your mailbox."
             )}
