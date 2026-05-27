@@ -3,7 +3,7 @@ import React from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import logoUrl from "@/assets/images/wo_logo_1779718689976.png";
+import logoUrl from "@/assets/images/wo_logo.png";
 
 interface FooterLink {
 	title: string;

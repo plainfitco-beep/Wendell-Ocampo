@@ -29,12 +29,12 @@ import {
 } from 'lucide-react';
 
 // Import D5 Rendered assets created earlier
-import monolithD5Url from "@/assets/images/monolith_d5_1779719912744.png";
-import japandiSancD5Url from "@/assets/images/japandi_sanc_d5_1779719932280.png";
-import spatioModularD5Url from "@/assets/images/spatio_modular_d5_1779719948601.png";
-import parametricFluidD5Url from "@/assets/images/parametric_fluid_d5_1779719968760.png";
-import terrazzoKitchenD5Url from "@/assets/images/terrazzo_kitchen_d5_1779719982667.png";
-import soundSphereD5Url from "@/assets/images/sound_sphere_d5_1779720001360.png";
+import monolithD5Url from "@/assets/images/brutalist_monolith.png";
+import japandiSancD5Url from "@/assets/images/japandi_sanctuary.png";
+import spatioModularD5Url from "@/assets/images/spatio_modular_living.png";
+import parametricFluidD5Url from "@/assets/images/parametric_fluid_pavilion.png";
+import terrazzoKitchenD5Url from "@/assets/images/terrazzo_kitchen.png";
+import soundSphereD5Url from "@/assets/images/sound_sphere.png";
 
 interface ShowcaseItem {
   id: string;

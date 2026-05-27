@@ -5,7 +5,7 @@ import { SplineScene } from "@/components/ui/splite";
 import { Spotlight } from "@/components/ui/spotlight"
 import { motion } from "framer-motion"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
-import bgImageUrl from "@/assets/images/living_room_bg_1779719240271.png";
+import bgImageUrl from "@/assets/images/living_room_bg.png";
  
 export function SplineSceneBasic() {
   const [email, setEmail] = useState('');

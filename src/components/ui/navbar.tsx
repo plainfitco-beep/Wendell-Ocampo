@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logoUrl from "@/assets/images/wo_logo_1779718689976.png";
+import logoUrl from "@/assets/images/wo_logo.png";
 
 export function Navbar({ 
   currentPage = 'home',
