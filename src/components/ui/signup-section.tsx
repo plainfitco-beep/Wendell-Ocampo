@@ -4,101 +4,12 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { CheckCircle2, Mail, Send, Sparkles, MessageSquare, User, FileText, ChevronRight } from 'lucide-react';
 
 export function SignupSection() {
-  const [activeTab, setActiveTab] = useState<'contact' | 'newsletter'>('contact');
-  
-  // Newsletter State
-  const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [newsletterStatus, setNewsletterStatus] = useState<null | 'success' | 'error'>(null);
-  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  // Contact Form State
-  const [contactName, setContactName] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
-  const [contactSubject, setContactSubject] = useState('');
-  const [contactMessage, setContactMessage] = useState('');
-  const [contactStatus, setContactStatus] = useState<null | 'success' | 'error'>(null);
-  const [contactLoading, setContactLoading] = useState(false);
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newsletterEmail) return;
-    setNewsletterLoading(true);
-
-    try {
-      const existing = localStorage.getItem('wendell_newsletter_signups');
-      const list = existing ? JSON.parse(existing) : [];
-      list.push({ email: newsletterEmail, timestamp: new Date().toISOString() });
-      localStorage.setItem('wendell_newsletter_signups', JSON.stringify(list));
-
-      // Log subscription on the backend Express pipeline
-      const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
-      await fetch(`${API_BASE}/api/subscribe`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: newsletterEmail })
-      });
-
-      setNewsletterStatus('success');
-      setNewsletterEmail('');
-    } catch (err) {
-      console.warn("Backend subscriber registration failed, saved locally", err);
-      // Fallback to local success representation
-      setNewsletterStatus('success');
-      setNewsletterEmail('');
-    } finally {
-      setNewsletterLoading(false);
-    }
-  };
-
-  const handleContactSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!contactName || !contactEmail || !contactMessage) return;
-    setContactLoading(true);
-
-    try {
-      // Store locally for rich dynamic interaction & persistence
-      const id = 'inquiry_' + Math.random().toString(36).substr(2, 9);
-      const existingInquiries = localStorage.getItem('wendell_project_inquiries');
-      const list = existingInquiries ? JSON.parse(existingInquiries) : [];
-      list.push({
-        id,
-        name: contactName,
-        email: contactEmail,
-        subject: contactSubject || 'General 3D Inquiry',
-        message: contactMessage,
-        timestamp: new Date().toISOString()
-      });
-      localStorage.setItem('wendell_project_inquiries', JSON.stringify(list));
-
-      const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
-      const response = await fetch(`${API_BASE}/api/inquiry`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: contactName,
-          email: contactEmail,
-          subject: contactSubject,
-          message: contactMessage
-        })
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setContactStatus('success');
-        // Reset details
-        setContactName('');
-        setContactEmail('');
-        setContactSubject('');
-        setContactMessage('');
-      } else {
-        setContactStatus('error');
-      }
-    } catch (err) {
-      setContactStatus('error');
-    } finally {
-      setContactLoading(false);
-    }
+  const handleCopy = () => {
+    navigator.clipboard.writeText("info@wendellocampo.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -111,184 +22,62 @@ export function SignupSection() {
           <div className="absolute top-0 right-0 w-80 h-80 bg-white/[0.02] rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/[0.01] rounded-full blur-3xl pointer-events-none translate-y-1/2 -translate-x-1/2" />
 
-          {/* Toggle switcher */}
-          <div className="inline-flex p-1 bg-white/5 border border-white/10 rounded-full mb-10 relative z-30">
-            <button
-              type="button"
-              onClick={() => { setActiveTab('contact'); setNewsletterStatus(null); setContactStatus(null); }}
-              className={`px-6 py-2 rounded-full text-xs font-semibold tracking-wider font-mono cursor-pointer transition-all ${
-                activeTab === 'contact' 
-                  ? 'bg-white text-black shadow-lg shadow-white/5' 
-                  : 'text-neutral-400 hover:text-white'
-              }`}
-            >
-              PROJECT INQUIRY
-            </button>
-            <button
-              type="button"
-              onClick={() => { setActiveTab('newsletter'); setNewsletterStatus(null); setContactStatus(null); }}
-              className={`px-6 py-2 rounded-full text-xs font-semibold tracking-wider font-mono cursor-pointer transition-all ${
-                activeTab === 'newsletter' 
-                  ? 'bg-white text-black shadow-lg shadow-white/5' 
-                  : 'text-neutral-400 hover:text-white'
-              }`}
-            >
-              SUBSCRIBE LIST
-            </button>
-          </div>
-
           {/* Icon Badge */}
           <div className="mx-auto w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 hover:scale-110 transition-transform duration-300">
-            {activeTab === 'contact' ? (
-              <MessageSquare className="size-5 text-neutral-300" />
-            ) : (
-              <Mail className="size-5 text-neutral-300" />
-            )}
+            <Mail className="size-5 text-neutral-300" />
           </div>
 
           <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl text-white font-display">
-            {activeTab === 'contact' ? (
-              <>Initiate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-300 via-neutral-100 to-neutral-500">3D Design</span></>
-            ) : (
-              <>Join The <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-300 via-neutral-100 to-neutral-500">Render Dispatch</span></>
-            )}
+            Initiate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-300 via-neutral-100 to-neutral-500">3D Design</span>
           </h2>
           
           <p className="text-neutral-400 mt-4 text-sm md:text-base max-w-xl mx-auto font-light leading-relaxed">
-            {activeTab === 'contact' ? (
-              "Submit your architectural vision, interior landscape, or custom product concept. We construct secure pipeline renders and immersive virtual assets."
-            ) : (
-              "Subscribe to receive ultra-high-resolution visualization showcases, real D5 Render presets, and exclusive personal studio updates directly in your mailbox."
-            )}
+            Submit your architectural vision, interior landscape, or custom product concept. Drop us a line directly to discuss secure pipeline renders and immersive virtual assets.
           </p>
 
-          <div className="mt-10 max-w-lg mx-auto relative z-30">
-            {activeTab === 'contact' ? (
-              contactStatus === 'success' ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="p-6 rounded-3xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-sm flex flex-col items-center justify-center gap-3"
-                >
-                  <CheckCircle2 className="size-8 stroke-[1.5] text-emerald-400 mb-1" />
-                  <span className="font-semibold text-base text-white">Inquiry Transmitted Successfully</span>
-                  <p className="text-neutral-400 text-xs text-center leading-relaxed">
-                    Your inquiry has been securely sent directly through our SMTP gateway. We will review your vision and get back to you shortly.
-                  </p>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleContactSubmit} className="space-y-4 text-left">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="relative">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <User className="size-4 text-neutral-500" />
-                      </span>
-                      <input
-                        type="text"
-                        value={contactName}
-                        onChange={(e) => setContactName(e.target.value)}
-                        placeholder="Your full name..."
-                        className="w-full pl-11 pr-5 py-3 rounded-2xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-white/20 transition-all font-mono placeholder:text-neutral-600"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="relative">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <Mail className="size-4 text-neutral-500" />
-                      </span>
-                      <input
-                        type="email"
-                        value={contactEmail}
-                        onChange={(e) => setContactEmail(e.target.value)}
-                        placeholder="Your contact email..."
-                        className="w-full pl-11 pr-5 py-3 rounded-2xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-white/20 transition-all font-mono placeholder:text-neutral-600"
-                        required
-                      />
-                    </div>
-                  </div>
+          <div className="mt-10 max-w-xl mx-auto relative z-30 flex flex-col items-center gap-6">
+            {/* Direct Email Container */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/[0.03] border border-white/10 p-2.5 pl-6 pr-3.5 rounded-full hover:border-white/20 transition-all duration-300 group">
+              <span className="text-neutral-500 font-mono text-xs uppercase tracking-widest select-none">Contact</span>
+              <a 
+                href="mailto:info@wendellocampo.com"
+                className="text-white hover:text-neutral-200 font-mono text-sm md:text-base font-medium tracking-wide transition-colors"
+              >
+                info@wendellocampo.com
+              </a>
+              <div className="h-px w-8 sm:h-4 sm:w-px bg-white/10 my-1 sm:my-0" />
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="px-4 py-2 rounded-full bg-white text-black text-xs font-semibold hover:bg-neutral-200 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-white/5"
+              >
+                {copied ? (
+                  <>
+                    <CheckCircle2 className="size-3.5 text-black" />
+                    <span>Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Mail className="size-3.5 text-black" />
+                    <span>Copy Address</span>
+                  </>
+                )}
+              </button>
+            </div>
 
-                  <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2">
-                      <FileText className="size-4 text-neutral-500" />
-                    </span>
-                    <input
-                      type="text"
-                      value={contactSubject}
-                      onChange={(e) => setContactSubject(e.target.value)}
-                      placeholder="Subject (e.g. Modern Villa Project)..."
-                      className="w-full pl-11 pr-5 py-3 rounded-2xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-white/20 transition-all font-mono placeholder:text-neutral-600"
-                    />
-                  </div>
-
-                  <div className="relative">
-                    <textarea
-                      value={contactMessage}
-                      onChange={(e) => setContactMessage(e.target.value)}
-                      placeholder="Detail your requirements, spatial scope, scale elements..."
-                      rows={4}
-                      className="w-full px-5 py-4 rounded-3xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-white/20 transition-all font-mono placeholder:text-neutral-600 resize-none min-h-[120px]"
-                      required
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={contactLoading}
-                    className="w-full py-4 rounded-full bg-white text-black text-sm font-semibold hover:bg-neutral-200 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-white/5"
-                  >
-                    <span>{contactLoading ? 'Encrypting & Dispatching...' : 'Dispatch Custom Inquiry'}</span>
-                    <Send className="size-3.5" />
-                  </button>
-                </form>
-              )
-            ) : (
-              newsletterStatus === 'success' ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="p-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-sm flex items-center justify-center gap-3"
-                >
-                  <CheckCircle2 className="size-5 shrink-0" />
-                  <span className="font-medium">Transmission complete. Welcome to the future of 3D Web! 🪐</span>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleSubscribe} className="relative flex flex-col sm:flex-row items-stretch gap-2.5">
-                  <div className="relative flex-1">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2">
-                      <Mail className="size-4 text-neutral-500" />
-                    </span>
-                    <input
-                      type="email"
-                      value={newsletterEmail}
-                      onChange={(e) => setNewsletterEmail(e.target.value)}
-                      placeholder="Enter terminal email reference..."
-                      className="w-full pl-11 pr-5 py-3 rounded-full bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-white/20 transition-all font-mono"
-                      required
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={newsletterLoading}
-                    className="px-8 py-3 rounded-full bg-white text-black text-sm font-semibold hover:bg-neutral-200 hover:scale-[1.03] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0"
-                  >
-                    {newsletterLoading ? 'Transmitting...' : 'Subscribe'}
-                    <Send className="size-3.5" />
-                  </button>
-                </form>
-              )
-            )}
-            
-            {(newsletterStatus === 'error' || contactStatus === 'error') && (
-              <p className="mt-3 text-red-400 text-xs font-light">
-                Transmission pipeline failed. Please retry your submission.
-              </p>
-            )}
+            {/* Direct Action Link */}
+            <a 
+              href="mailto:info@wendellocampo.com" 
+              className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-white transition-colors group"
+            >
+              <span>Launch mail client directly</span>
+              <ChevronRight className="size-3 text-neutral-500 group-hover:translate-x-0.5 transition-transform" />
+            </a>
           </div>
 
-          <div className="mt-8 flex items-center justify-center gap-2 text-xs text-neutral-500 font-light select-none">
+          <div className="mt-12 flex items-center justify-center gap-2 text-xs text-neutral-500 font-light select-none">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Secure 256-bit automated encryption. Emails are fully modularized and private.</span>
+            <span>Direct private communication interface. Expect replies within 24 hours.</span>
           </div>
 
         </AnimatedContainer>

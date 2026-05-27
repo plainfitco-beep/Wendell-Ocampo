@@ -104,12 +104,6 @@ export function Navbar({
               );
             })}
           </div>
-          <button 
-            onClick={(e) => handleLinkClick(e, 'Contact', '#signup')}
-            className="hidden md:inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-white text-black text-sm font-semibold hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] cursor-pointer"
-          >
-            Sign Up
-          </button>
           
           {/* Mobile Menu Toggle */}
           <button 
@@ -147,15 +141,6 @@ export function Navbar({
                 {item}
               </motion.a>
             ))}
-            <motion.button 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              onClick={(e) => handleLinkClick(e, 'Contact', '#signup')}
-              className="mt-2 mx-2 px-6 py-4 rounded-xl bg-white text-black text-base font-semibold hover:bg-neutral-200 transition-colors cursor-pointer"
-            >
-              Sign Up
-            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
