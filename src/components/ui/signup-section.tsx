@@ -50,7 +50,7 @@ export function SignupSection() {
     }
   };
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactName || !contactEmail || !contactMessage) return;
     setContactLoading(true);
@@ -70,27 +70,33 @@ export function SignupSection() {
       });
       localStorage.setItem('wendell_project_inquiries', JSON.stringify(list));
 
-      // Redirect directly to info@wendellocampo.com dynamically
-      const secretReceipt = "mailto:info@wendellocampo.com";
-      const mailtoUrl = `${secretReceipt}?subject=${encodeURIComponent(contactSubject || '3D Project Inquiry')}&body=${encodeURIComponent(
-        `Hi Wendell,\n\nName: ${contactName}\nEmail: ${contactEmail}\n\nMessage:\n${contactMessage}`
-      )}`;
+      const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+      const response = await fetch(`${API_BASE}/api/inquiry`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: contactName,
+          email: contactEmail,
+          subject: contactSubject,
+          message: contactMessage
+        })
+      });
 
-      setTimeout(() => {
+      const data = await response.json();
+
+      if (response.ok && data.success) {
         setContactStatus('success');
-        setContactLoading(false);
-        
-        // Launch dynamic non-blocking email client
-        window.location.href = mailtoUrl;
-
         // Reset details
         setContactName('');
         setContactEmail('');
         setContactSubject('');
         setContactMessage('');
-      }, 900);
+      } else {
+        setContactStatus('error');
+      }
     } catch (err) {
       setContactStatus('error');
+    } finally {
       setContactLoading(false);
     }
   };
@@ -167,7 +173,7 @@ export function SignupSection() {
                   <CheckCircle2 className="size-8 stroke-[1.5] text-emerald-400 mb-1" />
                   <span className="font-semibold text-base text-white">Inquiry Transmitted Successfully</span>
                   <p className="text-neutral-400 text-xs text-center leading-relaxed">
-                    Your request has been stored and decrypted to launch your local email client safely. Your privacy remains secure.
+                    Your inquiry has been securely sent directly through our SMTP gateway. We will review your vision and get back to you shortly.
                   </p>
                 </motion.div>
               ) : (

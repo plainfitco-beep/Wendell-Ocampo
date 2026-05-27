@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import multer from "multer";
+import nodemailer from "nodemailer";
 import { createServer as createViteServer } from "vite";
 
 interface AssetMetadata {
@@ -25,6 +26,16 @@ interface Subscriber {
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 const app = express();
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.hostinger.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "info@wendellocampo.com",
+    pass: process.env.EMAIL_PASSWORD || "",
+  },
+});
 
 // Set up directories for persistent uploads and metadata DB
 const UPLOADS_DIR = path.join(process.cwd(), "uploads");
@@ -260,6 +271,43 @@ app.post("/api/subscribe", (req, res) => {
   }
 
   res.json({ success: true, message: "Subscription verified successfully" });
+});
+
+// 3.5. Send email inquiry via Hostinger SMTP
+app.post("/api/inquiry", async (req, res) => {
+  const { name, email, subject, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ success: false, message: "Name, email, and message are required fields" });
+  }
+
+  if (!process.env.EMAIL_PASSWORD) {
+    console.warn("EMAIL_PASSWORD environment variable is not configured on the server.");
+    return res.status(500).json({ 
+      success: false, 
+      message: "Server SMTP credentials are not configured. Please define EMAIL_PASSWORD in Settings." 
+    });
+  }
+
+  try {
+    const info = await transporter.sendMail({
+      from: `"Website Form" <info@wendellocampo.com>`,
+      to: "info@wendellocampo.com",
+      replyTo: email,
+      subject: `New inquiry from ${name}: ${subject || 'General 3D Inquiry'}`,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+    });
+
+    console.log("Inquiry email dispatched successfully: ", info.messageId);
+    res.json({ success: true, message: "Inquiry emailed successfully" });
+  } catch (error: any) {
+    console.error("Nodemailer error: ", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Email sending failed. Please check SMTP parameters/credentials or contact support.",
+      error: error?.message || error
+    });
+  }
 });
 
 // 4. Admin asset upload endpoint
