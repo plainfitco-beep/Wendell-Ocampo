@@ -88,8 +88,6 @@ export function Navbar({
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
             {[
               ['Home', '#', 'home'], 
-              ['3D Gallery', '#works', 'gallery'], 
-              ['Downloads Repository', '#downloads', 'assets'],
               ['Contact', '#signup', 'home']
             ].map(([item, href, pageKey]) => {
               const isActive = (pageKey === 'gallery' && currentPage === 'gallery') || (pageKey === 'assets' && currentPage === 'assets') || (pageKey === 'home' && currentPage === 'home' && item !== 'Contact');
@@ -135,8 +133,6 @@ export function Navbar({
           >
             {[
               ['Home', '#'], 
-              ['3D Gallery', '#works'], 
-              ['Downloads Repository', '#downloads'],
               ['Contact', '#signup']
             ].map(([item, href], i) => (
               <motion.a 
