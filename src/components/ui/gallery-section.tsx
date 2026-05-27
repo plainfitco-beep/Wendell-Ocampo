@@ -26,8 +26,6 @@ interface GalleryItem {
   description: string;
   imageUrl: string;
   resolution: string;
-  engine: string;
-  cameraSettings?: string;
   dateAdded: string;
 }
 
@@ -38,9 +36,7 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
     category: 'Architectural',
     description: 'A structural residential villa carved directly from mountainside textured light concrete. Captured under cold foggy sunrise light conditions.',
     imageUrl: monolithD5Url,
-    resolution: '4K Rendering',
-    engine: 'D5 Render v3.8 Pro',
-    cameraSettings: 'Focal Length: 35mm, F/4.0, ISO 100',
+    resolution: 'Exterior 3D Vista',
     dateAdded: '2026-04-12',
   },
   {
@@ -49,9 +45,7 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
     category: 'Marketing Videos',
     description: 'A 60-second high-impact promotional walkthrough and kinetic camera sequence showcasing structural stacking, vertical gardens, and golden hour reflections.',
     imageUrl: spatioTowerRenderUrl,
-    resolution: '4K Cinematic (60 FPS)',
-    engine: 'D5 Render / Premiere Pro',
-    cameraSettings: 'Dynamic Path, Focal Length: 18-35mm Vario, F/4.0',
+    resolution: 'Motion Production Showcase',
     dateAdded: '2026-05-24',
   },
   {
@@ -60,9 +54,7 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
     category: 'Interior',
     description: 'A harmonious blend of Japanese minimalism and Scandinavian warmth featuring white-oak wood profiles, textured linen, and filtered daylight propagation shadows.',
     imageUrl: japandiSancD5Url,
-    resolution: '4K Rendering',
-    engine: 'D5 Render v3.8 Pro',
-    cameraSettings: 'Focal Length: 24mm Tilt-Shift, F/5.6, ISO 160',
+    resolution: 'Spatial Interior View',
     dateAdded: '2026-05-01',
   },
   {
@@ -71,9 +63,7 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
     category: 'Architectural',
     description: 'A futuristic luxury modular high-rise tower featuring stacked residential blocks, private garden balconies, and floor-to-ceiling glass panel facades under a vibrant clear sky.',
     imageUrl: spatioModularD5Url,
-    resolution: '4K Ultra Render',
-    engine: 'D5 Render v3.8 Pro',
-    cameraSettings: 'Focal Length: 24mm Wide-Angle, F/5.6, ISO 64',
+    resolution: 'Modular 3D Space',
     dateAdded: '2026-05-25',
   },
   {
@@ -82,9 +72,7 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
     category: 'Architectural',
     description: 'A dynamic cultural centre pavilion with fiberglass curved shells and water mirror surfaces casting golden hour light caustic reflections on concrete.',
     imageUrl: parametricFluidD5Url,
-    resolution: '4K Rendering',
-    engine: 'D5 Render v3.8 Pro',
-    cameraSettings: 'Focal Length: 18mm, F/8.0, ISO 100',
+    resolution: 'Fluid Pavilion Study',
     dateAdded: '2026-05-15',
   },
   {
@@ -93,9 +81,7 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
     category: 'Interior',
     description: 'Moody dark concrete kitchen island incorporating bespoke custom marble aggregate terrazzo counters and soft embedded brass illumination strips.',
     imageUrl: terrazzoKitchenD5Url,
-    resolution: '4K Rendering',
-    engine: 'D5 Render v3.8 Pro',
-    cameraSettings: 'Focal Length: 28mm, F/4.5, ISO 80',
+    resolution: 'Tactile Close-up',
     dateAdded: '2026-05-10',
   },
   {
@@ -104,9 +90,7 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
     category: 'Product Design',
     description: 'A luxury home companion featuring a glass projection ring floating magnetically above a round absolute-black granite base. Soft volumetric golden light emits from the inner rim.',
     imageUrl: luminousTimepieceD5Url,
-    resolution: '4K Studio Macro',
-    engine: 'D5 Render v3.8 Pro',
-    cameraSettings: 'Focal Length: 85mm, F/2.8, ISO 100',
+    resolution: 'Macro Product Detail',
     dateAdded: '2026-05-20',
   },
   {
@@ -115,9 +99,7 @@ const PRESEEDED_ITEMS: GalleryItem[] = [
     category: 'Marketing Videos',
     description: 'A bespoke premium cinematic advertisement detailing the precision magnetic levitation mechanism, gold-plated internal induction coil layers, and soft-glowing volumetric lighting.',
     imageUrl: luminousTimepieceD5Url,
-    resolution: '4K Commercial (30 FPS)',
-    engine: 'D5 Render / DaVinci Resolve',
-    cameraSettings: 'Orbit Path, Lens: 85mm Prime, F/2.8',
+    resolution: 'Commercial Interactive Video',
     dateAdded: '2026-05-26',
   }
 ];
@@ -131,8 +113,7 @@ export function GallerySection({ onEnterShowroom }: { onEnterShowroom?: () => vo
   const filteredItems = PRESEEDED_ITEMS.filter(item => {
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
     const matchesQuery = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.engine.toLowerCase().includes(searchQuery.toLowerCase());
+                         item.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesQuery;
   });
 
@@ -257,15 +238,14 @@ export function GallerySection({ onEnterShowroom }: { onEnterShowroom?: () => vo
                     </p>
                   </div>
 
-                  {/* Bottom Technical Indicators */}
-                  <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px] text-neutral-500">
-                    <div className="flex items-center gap-1">
+                  {/* Bottom Indicators */}
+                  <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px] text-neutral-500 font-mono">
+                    <div className="flex items-center gap-1 font-sans text-[11px]">
                       <Camera className="size-3 text-neutral-400" />
                       <span>{item.resolution}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Cpu className="size-3 text-neutral-400" />
-                      <span className="truncate max-w-[100px]">{item.engine}</span>
+                      <span>{item.dateAdded}</span>
                     </div>
                   </div>
                 </div>
@@ -334,29 +314,22 @@ export function GallerySection({ onEnterShowroom }: { onEnterShowroom?: () => vo
 
                   <div className="mt-8 space-y-4">
                     <div className="flex items-center justify-between text-xs py-2.5 border-b border-white/5">
-                      <span className="text-neutral-500 font-medium">Resolution standard</span>
+                      <span className="text-neutral-500 font-medium">Dimension Scope</span>
                       <span className="text-white font-mono font-semibold">{activeItem.resolution}</span>
                     </div>
 
                     <div className="flex items-center justify-between text-xs py-2.5 border-b border-white/5">
-                      <span className="text-neutral-500 font-medium">Core rendering core</span>
-                      <span className="text-white font-mono font-semibold">{activeItem.engine}</span>
+                      <span className="text-neutral-500 font-medium">Primary Category</span>
+                      <span className="text-white font-mono font-semibold">{activeItem.category}</span>
                     </div>
 
-                    {activeItem.cameraSettings && (
-                      <div className="flex flex-col gap-1 text-xs py-2.5 border-b border-white/5">
-                        <span className="text-neutral-500 font-medium">Camera telemetry parameters</span>
-                        <span className="text-white font-mono font-semibold text-[11px]">{activeItem.cameraSettings}</span>
-                      </div>
-                    )}
-
                     <div className="flex items-center justify-between text-xs py-2.5 border-b border-white/5">
-                      <span className="text-neutral-500 font-medium font-sans">Date processed</span>
+                      <span className="text-neutral-500 font-medium font-sans">Date Synthesized</span>
                       <span className="text-neutral-400 font-mono">{activeItem.dateAdded}</span>
                     </div>
 
                     <div className="flex items-center justify-between text-xs py-2.5 border-b border-white/5">
-                      <span className="text-neutral-500 font-medium font-sans">Color space calibration</span>
+                      <span className="text-neutral-500 font-medium font-sans">Color Space Calibration</span>
                       <span className="text-emerald-500 font-mono font-semibold">sRGB Linear Rec.709</span>
                     </div>
                   </div>

@@ -28,7 +28,7 @@ import {
   Settings
 } from 'lucide-react';
 
-// Import D5 Rendered assets created earlier
+// Import visual assets created earlier
 import monolithD5Url from "@/assets/images/brutalist_monolith.png";
 import japandiSancD5Url from "@/assets/images/japandi_sanctuary.png";
 import spatioModularD5Url from "@/assets/images/spatio_modular_living.png";
@@ -43,13 +43,7 @@ interface ShowcaseItem {
   description: string;
   imageUrl: string;
   resolution: string;
-  engine: string;
-  fov: string;
-  exposure: string;
-  contrast: string;
-  renderTime: string;
   scaleFactor: string;
-  gridCells: string;
   dateAdded: string;
 }
 
@@ -58,16 +52,10 @@ const GALLERY_ITEMS: ShowcaseItem[] = [
     id: 'spatio-modular',
     title: 'Spatio Modular Living',
     category: 'Architectural / Urbanism',
-    description: 'A futuristic luxury modular high-rise tower featuring stacked residential blocks, private garden balconies, and floor-to-ceiling glass panel facades under a vibrant clear sky. Rendered in real-time D5.',
+    description: 'A futuristic luxury modular high-rise tower featuring stacked residential blocks, private garden balconies, and floor-to-ceiling glass panel facades under a vibrant clear sky.',
     imageUrl: spatioModularD5Url,
-    resolution: '4K Rendering (3840x2160)',
-    engine: 'D5 Render v3.8 Pro',
-    fov: '24mm Wide-Angle',
-    exposure: 'EV +1.2',
-    contrast: 'Strong Contrast preset',
-    renderTime: '1.2 minutes (RTX 4090)',
+    resolution: 'Modular 3D Space',
     scaleFactor: '1:100 Structural Scale',
-    gridCells: '12x30 Modular Grid',
     dateAdded: '2026-05-25',
   },
   {
@@ -76,14 +64,8 @@ const GALLERY_ITEMS: ShowcaseItem[] = [
     category: 'Architectural / Landscape',
     description: 'A structural residential villa carved directly from mountainside textured light concrete. Captured under cold foggy sunrise light conditions.',
     imageUrl: monolithD5Url,
-    resolution: '4K Rendering (3840x2160)',
-    engine: 'D5 Render v3.8 Pro',
-    fov: '35mm Cinematic Lens',
-    exposure: 'EV -0.4',
-    contrast: 'Moody Desaturated preset',
-    renderTime: '2.4 minutes (RTX 4090)',
+    resolution: 'Exterior 3D Vista',
     scaleFactor: '1:50 Landscape Scale',
-    gridCells: '8x16 In-situ Masonry',
     dateAdded: '2026-04-12',
   },
   {
@@ -92,14 +74,8 @@ const GALLERY_ITEMS: ShowcaseItem[] = [
     category: 'Interior Design',
     description: 'A harmonious blend of Japanese minimalism and Scandinavian warmth featuring white-oak wood profiles, textured linen, and filtered daylight propagation shadows.',
     imageUrl: japandiSancD5Url,
-    resolution: '4K Rendering (3840x2160)',
-    engine: 'D5 Render v3.8 Pro',
-    fov: '24mm Tilt-Shift Lens',
-    exposure: 'EV +0.8',
-    contrast: 'Soft Ambient preset',
-    renderTime: '45 seconds (RTX 4090)',
+    resolution: 'Spatial Interior View',
     scaleFactor: '1:1 Space Scale',
-    gridCells: '10x12 Lighting Path',
     dateAdded: '2026-05-01',
   },
   {
@@ -108,14 +84,8 @@ const GALLERY_ITEMS: ShowcaseItem[] = [
     category: 'Architectural / Shell Structure',
     description: 'A dynamic cultural centre pavilion with fiberglass curved shells and water mirror surfaces casting golden hour light caustic reflections on concrete.',
     imageUrl: parametricFluidD5Url,
-    resolution: '4K Rendering (3840x2160)',
-    engine: 'D5 Render v3.8 Pro',
-    fov: '18mm Ultra-Wide Lens',
-    exposure: 'EV +0.2',
-    contrast: 'Sunset Warmth preset',
-    renderTime: '1.8 minutes (RTX 4090)',
+    resolution: 'Fluid Pavilion Study',
     scaleFactor: '1:200 Urban Scale',
-    gridCells: '45x45 Spine Curvature',
     dateAdded: '2026-05-15',
   },
   {
@@ -124,14 +94,8 @@ const GALLERY_ITEMS: ShowcaseItem[] = [
     category: 'Luxury Interior Space',
     description: 'Moody dark concrete kitchen island incorporating bespoke custom marble aggregate terrazzo counters and soft embedded brass illumination strips.',
     imageUrl: terrazzoKitchenD5Url,
-    resolution: '4K Rendering (3840x2160)',
-    engine: 'D5 Render v3.8 Pro',
-    fov: '28mm Standard Focal',
-    exposure: 'EV +0.0',
-    contrast: 'High-Contrast Matte',
-    renderTime: '55 seconds (RTX 4090)',
+    resolution: 'Tactile Close-up',
     scaleFactor: '1:1 Space Scale',
-    gridCells: '8x16 Tile Mesh',
     dateAdded: '2026-05-10',
   },
   {
@@ -140,14 +104,8 @@ const GALLERY_ITEMS: ShowcaseItem[] = [
     category: 'Industrial Product Design',
     description: 'An architectural table accessory with dual-chamber sonic sound modules, wrapped in acoustically transparent polymer meshes.',
     imageUrl: soundSphereD5Url,
-    resolution: '4K Studio Macro (3840x2160)',
-    engine: 'D5 Render v3.8 Pro',
-    fov: '85mm Portrait Macro',
-    exposure: 'EV +0.5',
-    contrast: 'Clean Studio lighting',
-    renderTime: '35 seconds (RTX 4090)',
+    resolution: 'Macro Product Detail',
     scaleFactor: '5:1 Component Scale',
-    gridCells: 'Mesh Geometry Grid',
     dateAdded: '2026-05-20',
   }
 ];
@@ -326,8 +284,8 @@ export function ThreeDGalleryPage({ onBack }: { onBack: () => void }) {
             {/* Corner HUD framing tags */}
             <div className="absolute top-6 left-6 z-30 font-mono text-[9px] text-neutral-400 tracking-wider flex flex-col gap-1 select-none">
               <span className="flex items-center gap-1.5"><Crosshair className="size-3 text-neutral-500" /> MATRIX COORD: X{rotateX.toFixed(1)}° / Y{rotateY.toFixed(1)}°</span>
-              <span>RENDER ENGINE: D5 RENDER v3.8 PRO</span>
-              <span>STATE: SHADER PROJECTION</span>
+              <span>SYSTEM: WEBGL ACTIVE MODEL</span>
+              <span>STATE: VERTEX PROJECTION</span>
             </div>
 
             <div className="absolute top-6 right-6 z-30 font-mono text-[9px] text-neutral-400 tracking-wider flex flex-col items-end gap-1 select-none">
@@ -372,12 +330,12 @@ export function ThreeDGalleryPage({ onBack }: { onBack: () => void }) {
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,250,255,0.15)_2px,transparent_2px),linear-gradient(to_bottom,rgba(0,250,255,0.15)_2px,transparent_2px)] bg-[size:16px_16px] z-20 mix-blend-color-dodge animate-pulse-slow">
                     {/* Floating HUD numbers */}
                     <div className="absolute bottom-4 left-4 font-mono text-[9px] text-[#00FAFF]">
-                      VECTOR MESH: COMPILING TRIS... {selectedItem.gridCells}
+                      VECTOR MESH: SHADER MODEL COMPILATION ACTIVE
                     </div>
                   </div>
                 )}
 
-                {/* Custom D5 Lighting Overlay Layer to project sunset dusk / morning / cyber colors onto the rendering */}
+                {/* Custom Lighting Overlay Layer to project sunset dusk / morning / cyber colors onto the rendering */}
                 <div className={`absolute inset-0 ${currentPreset.overlayClass} mix-blend-color transition-all duration-1000 z-15 pointer-events-none`} />
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 via-transparent to-transparent z-15 pointer-events-none" />
                 
@@ -516,28 +474,20 @@ export function ThreeDGalleryPage({ onBack }: { onBack: () => void }) {
             {showMetadataHud && (
               <div className="space-y-3 pt-4 border-t border-white/5">
                 <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Sliders className="size-3.5 text-neutral-400" /> Resolution</span>
+                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Sliders className="size-3.5 text-neutral-400" /> Dimension Scope</span>
                   <span className="text-xs font-mono text-white text-right font-medium">{selectedItem.resolution}</span>
                 </div>
                 <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Camera className="size-3.5 text-neutral-400" /> Focal Segment</span>
-                  <span className="text-xs font-mono text-white text-right font-medium">{selectedItem.fov}</span>
+                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Layers className="size-3.5 text-neutral-400" /> Spatial Scale</span>
+                  <span className="text-xs font-mono text-white text-right font-medium">{selectedItem.scaleFactor}</span>
                 </div>
                 <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Sun className="size-3.5 text-neutral-400" /> Exposure (EV)</span>
-                  <span className="text-xs font-mono text-white text-right font-medium">{selectedItem.exposure}</span>
-                </div>
-                <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Cpu className="size-3.5 text-neutral-400" /> Engine Specs</span>
-                  <span className="text-xs font-mono text-white text-right font-medium">{selectedItem.engine}</span>
-                </div>
-                <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Hourglass className="size-3.5 text-neutral-400" /> Render Trace Time</span>
-                  <span className="text-xs font-mono text-white text-right font-medium">{selectedItem.renderTime}</span>
+                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Cpu className="size-3.5 text-neutral-400" /> Technology</span>
+                  <span className="text-xs font-mono text-white text-right font-medium">Interactive WebGL</span>
                 </div>
                 <div className="flex items-center justify-between py-1.5">
-                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Layers className="size-3.5 text-neutral-400" /> Mesh Layout</span>
-                  <span className="text-xs font-mono text-white text-right font-medium">{selectedItem.gridCells}</span>
+                  <span className="text-xs text-neutral-500 flex items-center gap-1.5"><Hourglass className="size-3.5 text-neutral-400" /> Date Synthesized</span>
+                  <span className="text-xs font-mono text-white text-right font-medium">{selectedItem.dateAdded}</span>
                 </div>
               </div>
             )}
@@ -546,7 +496,7 @@ export function ThreeDGalleryPage({ onBack }: { onBack: () => void }) {
             <div className="pt-4 border-t border-white/5 flex flex-col gap-3">
               <span className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-white" />
-                D5 Atmosphere Presets
+                Atmospheric Shaders
               </span>
 
               <div className="grid grid-cols-2 gap-2">
@@ -658,7 +608,7 @@ export function ThreeDGalleryPage({ onBack }: { onBack: () => void }) {
                   </div>
                   <div>
                     <h5 className="text-xs text-neutral-300 font-semibold truncate group-hover:text-white transition-colors">{item.title}</h5>
-                    <span className="text-[10px] text-neutral-500 font-mono block mt-1">{item.fov}</span>
+                    <span className="text-[10px] text-neutral-500 font-mono block mt-1">{item.resolution}</span>
                   </div>
                 </button>
               );
