@@ -450,7 +450,7 @@ export function AssetsPage() {
   const handleAssetUploadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!uploadFile) {
-      setUploadProgress("Please specify an actual 3D asset file (.glb, .obj, .gltf).");
+      setUploadProgress("Please specify a valid asset or image file (.glb, .obj, .gltf, .mp4, .png, .jpg).");
       return;
     }
     if (!uploadTitle) {
@@ -953,8 +953,8 @@ export function AssetsPage() {
                                 </div>
                               ) : (
                                 <div className="mt-2">
-                                  <p className="text-xs font-mono text-neutral-300">Drag & drop your 3D Asset or <label className="text-[#00FAFF] underline cursor-pointer hover:text-sky-300">browse<input type="file" onChange={handleFileChange} className="hidden" accept=".glb,.obj,.gltf" /></label></p>
-                                  <p className="text-[10px] text-neutral-500 font-mono mt-1">Acceptable types: .glb, .obj, .gltf (Max 50MB)</p>
+                                  <p className="text-xs font-mono text-neutral-300">Drag & drop your file or <label className="text-[#00FAFF] underline cursor-pointer hover:text-sky-300">browse<input type="file" onChange={handleFileChange} className="hidden" accept=".glb,.obj,.gltf,.mp4,.png,.jpg,.jpeg,.webp" /></label></p>
+                                  <p className="text-[10px] text-neutral-500 font-mono mt-1">Acceptable types: .glb, .obj, .gltf, .mp4, .png, .jpg, .webp (Max 50MB)</p>
                                 </div>
                               )}
                             </div>

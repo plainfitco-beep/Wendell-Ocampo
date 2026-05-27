@@ -36,11 +36,137 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 }
 
 // Seed empty databases if not present
-if (!fs.existsSync(METADATA_FILE)) {
-  fs.writeFileSync(METADATA_FILE, JSON.stringify([], null, 2));
-}
 if (!fs.existsSync(SUBSCRIBERS_FILE)) {
   fs.writeFileSync(SUBSCRIBERS_FILE, JSON.stringify([], null, 2));
+}
+
+let seedAssets: AssetMetadata[] = [];
+try {
+  const imagesSourceDir = path.join(process.cwd(), "src", "assets", "images");
+  if (fs.existsSync(imagesSourceDir)) {
+    const files = fs.readdirSync(imagesSourceDir);
+    const pngFiles = files.filter(f => f.endsWith(".png") && f !== "wo_logo.png" && f !== "living_room_bg.png");
+    
+    // Copy each png to uploads directory
+    pngFiles.forEach(file => {
+      const srcPath = path.join(imagesSourceDir, file);
+      const destPath = path.join(UPLOADS_DIR, file);
+      if (fs.existsSync(srcPath) && !fs.existsSync(destPath)) {
+        fs.copyFileSync(srcPath, destPath);
+      }
+    });
+
+    // Create seed database array
+    seedAssets = [
+      {
+        id: "asset-monolith-png",
+        filename: "brutalist_monolith.png",
+        originalName: "brutalist_monolith.png",
+        title: "The Brutalist Monolith High-Res Render",
+        description: "High-resolution 4K PNG render of the Brutalist Monolith mountain villa design.",
+        fileSize: "2.4 MB",
+        category: "Architectural",
+        fileFormat: ".png",
+        downloadCount: 18,
+        uploadDate: new Date().toISOString(),
+        price: 0
+      },
+      {
+        id: "asset-japandi-png",
+        filename: "japandi_sanctuary.png",
+        originalName: "japandi_sanctuary.png",
+        title: "Japandi Sanctuary Common High-Res Render",
+        description: "Premium 4K PNG landscape render of the Japandi-style living space interior design.",
+        fileSize: "1.8 MB",
+        category: "Interior Design",
+        fileFormat: ".png",
+        downloadCount: 12,
+        uploadDate: new Date().toISOString(),
+        price: 0
+      },
+      {
+        id: "asset-modular-png",
+        filename: "spatio_modular_living.png",
+        originalName: "spatio_modular_living.png",
+        title: "Spatio Modular Living High-Res Render",
+        description: "Futuristic luxury modular high-rise tower design render in 4K PNG format.",
+        fileSize: "3.1 MB",
+        category: "Architectural",
+        fileFormat: ".png",
+        downloadCount: 24,
+        uploadDate: new Date().toISOString(),
+        price: 0
+      },
+      {
+        id: "asset-pavilion-png",
+        filename: "parametric_fluid_pavilion.png",
+        originalName: "parametric_fluid_pavilion.png",
+        title: "Parametric Fluid Pavilion High-Res Render",
+        description: "A dynamic cultural centre pavilion with fiberglass curved shells and mirror pools.",
+        fileSize: "2.9 MB",
+        category: "Architectural",
+        fileFormat: ".png",
+        downloadCount: 15,
+        uploadDate: new Date().toISOString(),
+        price: 0
+      },
+      {
+        id: "asset-kitchen-png",
+        filename: "terrazzo_kitchen.png",
+        originalName: "terrazzo_kitchen.png",
+        title: "Terrazzo Kitchen Laboratory High-Res Render",
+        description: "Moody, high-contrast dark concrete kitchen island featuring custom aggregate terrazzo.",
+        fileSize: "1.6 MB",
+        category: "Luxury Interior Space",
+        fileFormat: ".png",
+        downloadCount: 9,
+        uploadDate: new Date().toISOString(),
+        price: 0
+      },
+      {
+        id: "asset-soundsphere-png",
+        filename: "sound_sphere.png",
+        originalName: "sound_sphere.png",
+        title: "Solfeggio Sound Sphere Concept High-Res",
+        description: "High-fidelity industrial product concept rendering of dual-chamber speaker mesh.",
+        fileSize: "1.2 MB",
+        category: "Product Design",
+        fileFormat: ".png",
+        downloadCount: 7,
+        uploadDate: new Date().toISOString(),
+        price: 0
+      },
+      {
+        id: "asset-spatiotower-png",
+        filename: "spatio_tower_render.png",
+        originalName: "spatio_tower_render.png",
+        title: "Spatio Tower Rendering High-Res",
+        description: "Pre-graded, cinematic 4K PNG structural tower visualization render.",
+        fileSize: "3.5 MB",
+        category: "Architectural",
+        fileFormat: ".png",
+        downloadCount: 31,
+        uploadDate: new Date().toISOString(),
+        price: 0
+      }
+    ];
+  }
+} catch (e) {
+  console.error("Error seeding assets:", e);
+}
+
+// Write seed metadata if empty or not exist
+if (!fs.existsSync(METADATA_FILE)) {
+  fs.writeFileSync(METADATA_FILE, JSON.stringify(seedAssets, null, 2));
+} else {
+  try {
+    const existingData = JSON.parse(fs.readFileSync(METADATA_FILE, "utf-8"));
+    if (!Array.isArray(existingData) || existingData.length === 0) {
+      fs.writeFileSync(METADATA_FILE, JSON.stringify(seedAssets, null, 2));
+    }
+  } catch(e) {
+    fs.writeFileSync(METADATA_FILE, JSON.stringify(seedAssets, null, 2));
+  }
 }
 
 // Multer Storage Configuration

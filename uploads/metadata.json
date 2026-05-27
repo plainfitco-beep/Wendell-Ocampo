@@ -1,0 +1,93 @@
+[
+  {
+    "id": "asset-monolith-png",
+    "filename": "brutalist_monolith.png",
+    "originalName": "brutalist_monolith.png",
+    "title": "The Brutalist Monolith High-Res Render",
+    "description": "High-resolution 4K PNG render of the Brutalist Monolith mountain villa design.",
+    "fileSize": "2.4 MB",
+    "category": "Architectural",
+    "fileFormat": ".png",
+    "downloadCount": 18,
+    "uploadDate": "2026-05-27T12:00:00.000Z",
+    "price": 0
+  },
+  {
+    "id": "asset-japandi-png",
+    "filename": "japandi_sanctuary.png",
+    "originalName": "japandi_sanctuary.png",
+    "title": "Japandi Sanctuary Common High-Res Render",
+    "description": "Premium 4K PNG landscape render of the Japandi-style living space interior design.",
+    "fileSize": "1.8 MB",
+    "category": "Interior Design",
+    "fileFormat": ".png",
+    "downloadCount": 12,
+    "uploadDate": "2026-05-27T12:00:00.000Z",
+    "price": 0
+  },
+  {
+    "id": "asset-modular-png",
+    "filename": "spatio_modular_living.png",
+    "originalName": "spatio_modular_living.png",
+    "title": "Spatio Modular Living High-Res Render",
+    "description": "Futuristic luxury modular high-rise tower design render in 4K PNG format.",
+    "fileSize": "3.1 MB",
+    "category": "Architectural",
+    "fileFormat": ".png",
+    "downloadCount": 24,
+    "uploadDate": "2026-05-27T12:00:00.000Z",
+    "price": 0
+  },
+  {
+    "id": "asset-pavilion-png",
+    "filename": "parametric_fluid_pavilion.png",
+    "originalName": "parametric_fluid_pavilion.png",
+    "title": "Parametric Fluid Pavilion High-Res Render",
+    "description": "A dynamic cultural centre pavilion with fiberglass curved shells and mirror pools.",
+    "fileSize": "2.9 MB",
+    "category": "Architectural",
+    "fileFormat": ".png",
+    "downloadCount": 15,
+    "uploadDate": "2026-05-27T12:00:00.000Z",
+    "price": 0
+  },
+  {
+    "id": "asset-kitchen-png",
+    "filename": "terrazzo_kitchen.png",
+    "originalName": "terrazzo_kitchen.png",
+    "title": "Terrazzo Kitchen Laboratory High-Res Render",
+    "description": "Moody, high-contrast dark concrete kitchen island featuring custom aggregate terrazzo.",
+    "fileSize": "1.6 MB",
+    "category": "Luxury Interior Space",
+    "fileFormat": ".png",
+    "downloadCount": 9,
+    "uploadDate": "2026-05-27T12:00:00.000Z",
+    "price": 0
+  },
+  {
+    "id": "asset-soundsphere-png",
+    "filename": "sound_sphere.png",
+    "originalName": "sound_sphere.png",
+    "title": "Solfeggio Sound Sphere Concept High-Res",
+    "description": "High-fidelity industrial product concept rendering of dual-chamber speaker mesh.",
+    "fileSize": "1.2 MB",
+    "category": "Product Design",
+    "fileFormat": ".png",
+    "downloadCount": 7,
+    "uploadDate": "2026-05-27T12:00:00.000Z",
+    "price": 0
+  },
+  {
+    "id": "asset-spatiotower-png",
+    "filename": "spatio_tower_render.png",
+    "originalName": "spatio_tower_render.png",
+    "title": "Spatio Tower Rendering High-Res",
+    "description": "Pre-graded, cinematic 4K PNG structural tower visualization render.",
+    "fileSize": "3.5 MB",
+    "category": "Architectural",
+    "fileFormat": ".png",
+    "downloadCount": 31,
+    "uploadDate": "2026-05-27T12:00:00.000Z",
+    "price": 0
+  }
+]
