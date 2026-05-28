@@ -4,7 +4,6 @@ import fs from "fs";
 import multer from "multer";
 import nodemailer from "nodemailer";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
 
 interface AssetMetadata {
   id: string;
@@ -414,110 +413,6 @@ app.get("/api/assets/download/:id", (req, res) => {
 
   // Send binary file chunk stream
   res.download(fileLocation, asset.originalName);
-});
-
-// ================= GEMINI CHATBOT API =================
-let geminiClient: GoogleGenAI | null = null;
-
-function getGeminiClient(): GoogleGenAI {
-  if (!geminiClient) {
-    const key = process.env.GEMINI_API_KEY;
-    if (!key) {
-      throw new Error("GEMINI_API_KEY environment variable is not configured on the server. Please add it in project Settings > Secrets.");
-    }
-    geminiClient = new GoogleGenAI({
-      apiKey: key,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
-        }
-      }
-    });
-  }
-  return geminiClient;
-}
-
-app.post("/api/chat", async (req, res) => {
-  const { messages } = req.body;
-  if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ success: false, message: "Invalid message history structure" });
-  }
-
-  // Graceful check for configured GEMINI_API_KEY
-  const key = process.env.GEMINI_API_KEY;
-  const isKeyConfigured = key && key.trim() !== "" && key !== "MY_GEMINI_API_KEY";
-
-  if (!isKeyConfigured) {
-    const lastUserMessage = [...messages].reverse().find(m => m && m.role === "user")?.content || "";
-    const promptText = lastUserMessage.toLowerCase();
-    
-    let reply = "";
-    if (promptText.includes("who") || promptText.includes("about") || promptText.includes("wendell") || promptText.includes("bio")) {
-      reply = "Wendell Ocampo is an elite 3D Designer who specializes in high-fidelity spatial visualizations across architecture, interior design, product rendering, and landscape concept modeling. He develops beautiful real-time interactive WebGL solutions that runs directly inside client browsers.";
-    } else if (promptText.includes("contact") || promptText.includes("email") || promptText.includes("hire") || promptText.includes("reach") || promptText.includes("inquiry")) {
-      reply = "We are always open to discuss custom spatial projects or premium layout solutions! You can reach Wendell directly by sending an email to **info@wendellocampo.com** or fill out our contact inquiry form located at the footer of the Home lobby.";
-    } else if (promptText.includes("skill") || promptText.includes("tech") || promptText.includes("tool") || promptText.includes("engine") || promptText.includes("webgl")) {
-      reply = "Wendell's core technological and creative expertise covers:\n\n" +
-              "- **Custom WebGL Interactive Engines**: Architecting high-contrast real-time 3D spaces renderable on the web.\n" +
-              "- **High-End Architectural Planning**: Transforming architectural drafts and mountain villa concepts into atmospheric visualizations.\n" +
-              "- **Premium Interior CGI renders**: Styling warm, minimalist interior spaces (Japandi style, high-end kitchens) with elegant material shadows.";
-    } else if (promptText.includes("file") || promptText.includes("download") || promptText.includes("mesh") || promptText.includes("showroom") || promptText.includes("asset") || promptText.includes("gallery")) {
-      reply = "You can view, rotate, interact with, and download any of Wendell's premium assets! Simply click on the **Showroom** (3D Gallery tab) in the navigation bar to download assets (e.g., Solfeggio sound sphere mesh, mountain villa renders) or subscribe to his email catalog.";
-    } else {
-      reply = "Welcome to Wendell Ocampo's creative portfolio portal! I am **Onyx**, Wendell's digital 3D design assistant. Here is how I can point you in the right direction:\n\n" +
-              "- **Explore Wendell's Skills**: Learn about his interactive 3D WebGL setups and specialized styling concept modeling.\n" +
-              "- **Visit the Showroom**: Browse the 3D Gallery tab to view real-time wireframes or request the download files.\n" +
-              "- **Get in Touch**: Drop a message in the inquiry box or email **info@wendellocampo.com** to hire Wendell for your next creative endeavor.";
-    }
-    return res.json({ success: true, response: reply });
-  }
-
-  try {
-    const aiClient = getGeminiClient();
-    
-    // Map history to Google GenAI format: { role: 'user' | 'model', parts: [{ text: '...' }] }
-    // Filter messages with actual content
-    const formattedContents = messages
-      .filter((m: any) => m && m.content)
-      .map((m: any) => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      }));
-
-    if (formattedContents.length === 0) {
-      return res.status(400).json({ success: false, message: "No active messages were found in request payload" });
-    }
-
-    const systemInstruction = 
-      "You are a helpful, professional, and friendly 3D Design Assistant named 'Onyx', developed to assist visitors on the " +
-      "portfolio website of Wendell Ocampo. Wendell is an elite 3D Designer who specializes in high-fidelity " +
-      "spatial visualizations across architecture, interior design, product rendering, and landscape concept modeling. " +
-      "He uses WebGL and state-of-the-art interactive engines. " +
-      "\n\nRules of engagement:\n" +
-      "1. Be extremely polite, professional, and concise. " +
-      "2. Respond to users detailing Wendell's skills: interactive 3D spaces, interior design CGI, architectural planning, product visualization, custom WebGL applications.\n" +
-      "3. Highlight that users can visit the 'Showroom' (3D Gallery tab) to view and download his premium asset files and renders or explore the interactive 3D meshes directly on their browsers.\n" +
-      "4. Direct users to the contact/inquiry section or suggest emailing info@wendellocampo.com if they want to hire Wendell for custom spatial projections or premium digital solutions.\n" +
-      "5. Do NOT mention third-party rendering engines like D5 Render or Corona - Wendell’s tools are styled as custom real-time WebGL engines.\n" +
-      "6. Keep responses clean, stylish, formatted in short Markdown paragraphs with bullet points.";
-
-    const response = await aiClient.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: formattedContents,
-      config: {
-        systemInstruction,
-      }
-    });
-
-    const reply = response.text || "I apologize, but I was unable to compile a response at this time. Let's try redirecting your request to info@wendellocampo.com!";
-    res.json({ success: true, response: reply });
-  } catch (error: any) {
-    console.error("Gemini API error in /api/chat:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: error?.message || "An error occurred with the conversational backend. Make sure GEMINI_API_KEY is configured."
-    });
-  }
 });
 
 async function runExpress() {
