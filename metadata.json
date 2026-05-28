@@ -1,5 +1,6 @@
 {
   "name": "Wendell Ocampo Portfolio",
-  "description": "A creative portfolio website",
-  "requestFramePermissions": []
+  "description": "A creative portfolio website with interactive WebGL and Gemini-powered smart design assistant chatbot.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

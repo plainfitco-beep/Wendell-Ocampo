@@ -12,6 +12,7 @@ import { SignupSection } from "@/components/ui/signup-section";
 import { Footer } from "@/components/ui/footer-section";
 import { ThreeDGalleryPage } from "@/components/ui/three-d-gallery";
 import { AssetsPage } from "@/components/ui/assets-page";
+import { Chatbot } from "@/components/ui/chatbot";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'gallery' | 'assets'>('home');
@@ -60,6 +61,7 @@ export default function App() {
       )}
 
       <Footer />
+      <Chatbot />
     </div>
   );
 }

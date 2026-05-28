@@ -4,6 +4,7 @@ import fs from "fs";
 import multer from "multer";
 import nodemailer from "nodemailer";
 import { createServer as createViteServer } from "vite";
+import { GoogleGenAI } from "@google/genai";
 
 interface AssetMetadata {
   id: string;
@@ -413,6 +414,81 @@ app.get("/api/assets/download/:id", (req, res) => {
 
   // Send binary file chunk stream
   res.download(fileLocation, asset.originalName);
+});
+
+// ================= GEMINI CHATBOT API =================
+let geminiClient: GoogleGenAI | null = null;
+
+function getGeminiClient(): GoogleGenAI {
+  if (!geminiClient) {
+    const key = process.env.GEMINI_API_KEY;
+    if (!key) {
+      throw new Error("GEMINI_API_KEY environment variable is not configured on the server. Please add it in project Settings > Secrets.");
+    }
+    geminiClient = new GoogleGenAI({
+      apiKey: key,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        }
+      }
+    });
+  }
+  return geminiClient;
+}
+
+app.post("/api/chat", async (req, res) => {
+  const { messages } = req.body;
+  if (!messages || !Array.isArray(messages)) {
+    return res.status(400).json({ success: false, message: "Invalid message history structure" });
+  }
+
+  try {
+    const aiClient = getGeminiClient();
+    
+    // Map history to Google GenAI format: { role: 'user' | 'model', parts: [{ text: '...' }] }
+    // Filter messages with actual content
+    const formattedContents = messages
+      .filter((m: any) => m && m.content)
+      .map((m: any) => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }]
+      }));
+
+    if (formattedContents.length === 0) {
+      return res.status(400).json({ success: false, message: "No active messages were found in request payload" });
+    }
+
+    const systemInstruction = 
+      "You are a helpful, professional, and friendly 3D Design Assistant named 'Onyx', developed to assist visitors on the " +
+      "portfolio website of Wendell Ocampo. Wendell is an elite 3D Designer who specializes in high-fidelity " +
+      "spatial visualizations across architecture, interior design, product rendering, and landscape concept modeling. " +
+      "He uses WebGL and state-of-the-art interactive engines. " +
+      "\n\nRules of engagement:\n" +
+      "1. Be extremely polite, professional, and concise. " +
+      "2. Respond to users detailing Wendell's skills: interactive 3D spaces, interior design CGI, architectural planning, product visualization, custom WebGL applications.\n" +
+      "3. Highlight that users can visit the 'Showroom' (3D Gallery tab) to view and download his premium asset files and renders or explore the interactive 3D meshes directly on their browsers.\n" +
+      "4. Direct users to the contact/inquiry section or suggest emailing info@wendellocampo.com if they want to hire Wendell for custom spatial projections or premium digital solutions.\n" +
+      "5. Do NOT mention third-party rendering engines like D5 Render or Corona - Wendell’s tools are styled as custom real-time WebGL engines.\n" +
+      "6. Keep responses clean, stylish, formatted in short Markdown paragraphs with bullet points.";
+
+    const response = await aiClient.models.generateContent({
+      model: "gemini-3.5-flash",
+      contents: formattedContents,
+      config: {
+        systemInstruction,
+      }
+    });
+
+    const reply = response.text || "I apologize, but I was unable to compile a response at this time. Let's try redirecting your request to info@wendellocampo.com!";
+    res.json({ success: true, response: reply });
+  } catch (error: any) {
+    console.error("Gemini API error in /api/chat:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: error?.message || "An error occurred with the conversational backend. Make sure GEMINI_API_KEY is configured."
+    });
+  }
 });
 
 async function runExpress() {
