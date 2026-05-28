@@ -7,6 +7,8 @@ interface Message {
   content: string;
 }
 
+const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -42,14 +44,25 @@ export function Chatbot() {
 
     try {
       // Endpoint is server-side proxy
-      const res = await fetch("/api/chat", {
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: updatedMessages }),
       });
 
-      const data = await res.json();
-      if (res.ok && data.success) {
+      const responseText = await res.text();
+      let data: any;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        throw new Error("Unable to establish remote dialogue stream. Our high-fidelity portal is currently executing maintenance; you can contact us directly at info@wendellocampo.com!");
+      }
+
+      if (!res.ok) {
+        throw new Error(data.message || `HTTP Error ${res.status}`);
+      }
+
+      if (data.success) {
         setMessages((prev) => [...prev, { role: "assistant", content: data.response }]);
       } else {
         throw new Error(data.message || "Failed to establish dialogue stream.");

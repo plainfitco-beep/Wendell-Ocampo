@@ -443,6 +443,35 @@ app.post("/api/chat", async (req, res) => {
     return res.status(400).json({ success: false, message: "Invalid message history structure" });
   }
 
+  // Graceful check for configured GEMINI_API_KEY
+  const key = process.env.GEMINI_API_KEY;
+  const isKeyConfigured = key && key.trim() !== "" && key !== "MY_GEMINI_API_KEY";
+
+  if (!isKeyConfigured) {
+    const lastUserMessage = [...messages].reverse().find(m => m && m.role === "user")?.content || "";
+    const promptText = lastUserMessage.toLowerCase();
+    
+    let reply = "";
+    if (promptText.includes("who") || promptText.includes("about") || promptText.includes("wendell") || promptText.includes("bio")) {
+      reply = "Wendell Ocampo is an elite 3D Designer who specializes in high-fidelity spatial visualizations across architecture, interior design, product rendering, and landscape concept modeling. He develops beautiful real-time interactive WebGL solutions that runs directly inside client browsers.";
+    } else if (promptText.includes("contact") || promptText.includes("email") || promptText.includes("hire") || promptText.includes("reach") || promptText.includes("inquiry")) {
+      reply = "We are always open to discuss custom spatial projects or premium layout solutions! You can reach Wendell directly by sending an email to **info@wendellocampo.com** or fill out our contact inquiry form located at the footer of the Home lobby.";
+    } else if (promptText.includes("skill") || promptText.includes("tech") || promptText.includes("tool") || promptText.includes("engine") || promptText.includes("webgl")) {
+      reply = "Wendell's core technological and creative expertise covers:\n\n" +
+              "- **Custom WebGL Interactive Engines**: Architecting high-contrast real-time 3D spaces renderable on the web.\n" +
+              "- **High-End Architectural Planning**: Transforming architectural drafts and mountain villa concepts into atmospheric visualizations.\n" +
+              "- **Premium Interior CGI renders**: Styling warm, minimalist interior spaces (Japandi style, high-end kitchens) with elegant material shadows.";
+    } else if (promptText.includes("file") || promptText.includes("download") || promptText.includes("mesh") || promptText.includes("showroom") || promptText.includes("asset") || promptText.includes("gallery")) {
+      reply = "You can view, rotate, interact with, and download any of Wendell's premium assets! Simply click on the **Showroom** (3D Gallery tab) in the navigation bar to download assets (e.g., Solfeggio sound sphere mesh, mountain villa renders) or subscribe to his email catalog.";
+    } else {
+      reply = "Welcome to Wendell Ocampo's creative portfolio portal! I am **Onyx**, Wendell's digital 3D design assistant. Here is how I can point you in the right direction:\n\n" +
+              "- **Explore Wendell's Skills**: Learn about his interactive 3D WebGL setups and specialized styling concept modeling.\n" +
+              "- **Visit the Showroom**: Browse the 3D Gallery tab to view real-time wireframes or request the download files.\n" +
+              "- **Get in Touch**: Drop a message in the inquiry box or email **info@wendellocampo.com** to hire Wendell for your next creative endeavor.";
+    }
+    return res.json({ success: true, response: reply });
+  }
+
   try {
     const aiClient = getGeminiClient();
     
