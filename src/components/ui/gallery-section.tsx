@@ -118,21 +118,21 @@ export function GallerySection({ onEnterShowroom }: { onEnterShowroom?: () => vo
   });
 
   return (
-    <section id="works" className="py-24 md:py-32 w-full relative">
+    <section id="works" className="pt-4 pb-16 md:pt-6 md:pb-24 w-full relative">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.01] to-transparent pointer-events-none" />
       
       <div className="mx-auto w-full max-w-6xl px-4 relative z-10">
         
         {/* Header Block */}
-        <div className="text-center max-w-3xl mx-auto mb-16 flex flex-col items-center">
-          <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 text-sm font-medium mb-6 backdrop-blur-md">
-            <Sparkles className="w-4 h-4 mr-2 text-white animate-pulse" />
+        <div className="text-center max-w-3xl mx-auto mb-10 flex flex-col items-center">
+          <div className="inline-flex items-center justify-center px-4 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-300 text-xs font-medium mb-4 backdrop-blur-md">
+            <Sparkles className="w-3.5 h-3.5 mr-2 text-white animate-pulse" />
             Interactive Spatial Portfolio
           </div>
-          <h2 className="text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl font-display text-center">
+          <h2 className="text-3xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl font-display text-center">
             The Render <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-300 via-neutral-100 to-neutral-500">Archive</span>
           </h2>
-          <p className="text-neutral-400 mt-6 text-base md:text-lg tracking-wide max-w-2xl mx-auto font-light leading-relaxed text-center">
+          <p className="text-neutral-400 mt-3 text-sm md:text-base tracking-wide max-w-2xl mx-auto font-light leading-relaxed text-center">
             A comprehensive, client-accessible gallery showcasing high-fidelity architectural rendering concepts, mid-century modern interior animations, and stunning interactive digital walkthrough walkthroughs.
           </p>
 
@@ -141,11 +141,11 @@ export function GallerySection({ onEnterShowroom }: { onEnterShowroom?: () => vo
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
               onClick={onEnterShowroom}
-              className="mt-8 inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-emerald-500 text-black font-bold hover:bg-emerald-400 transition-all shadow-[0_0_30px_rgba(16,185,129,0.25)] hover:shadow-[0_0_55px_rgba(16,185,129,0.5)] cursor-pointer group text-sm"
+              className="mt-5 inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-emerald-500 text-black font-bold hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_35px_rgba(16,185,129,0.4)] cursor-pointer group text-xs"
             >
-              <Sparkles className="w-4 h-4 text-black animate-pulse" />
+              <Sparkles className="w-3.5 h-3.5 text-black animate-pulse" />
               <span>Launch Virtual 3D Showroom Page</span>
-              <span className="w-5 h-5 rounded-full bg-black/10 flex items-center justify-center text-xs ml-1 group-hover:translate-x-0.5 transition-transform font-mono">→</span>
+              <span className="w-4 h-4 rounded-full bg-black/10 flex items-center justify-center text-[10px] ml-1 group-hover:translate-x-0.5 transition-transform font-mono">→</span>
             </motion.button>
           )}
         </div>

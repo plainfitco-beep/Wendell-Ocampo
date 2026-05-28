@@ -7,8 +7,8 @@ export function Navbar({
   currentPage = 'home',
   onNavigate 
 }: { 
-  currentPage?: 'home' | 'gallery' | 'assets';
-  onNavigate?: (page: 'home' | 'gallery' | 'assets') => void;
+  currentPage?: 'home' | 'gallery' | 'assets' | 'portfolio';
+  onNavigate?: (page: 'home' | 'gallery' | 'assets' | 'portfolio') => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -23,12 +23,17 @@ export function Navbar({
 
   const handleLinkClick = (e: React.MouseEvent, item: string, href: string) => {
     setIsOpen(false);
-    if (item === '3D Gallery') {
+    if (item === 'Portfolio') {
+      e.preventDefault();
+      if (onNavigate) {
+        onNavigate('portfolio');
+      }
+    } else if (item === '3D Gallery' || item === 'Gallery') {
       e.preventDefault();
       if (onNavigate) {
         onNavigate('gallery');
       }
-    } else if (item === 'Downloads Repository') {
+    } else if (item === 'Downloads' || item === 'Downloads Repository') {
       e.preventDefault();
       if (onNavigate) {
         onNavigate('assets');
@@ -85,12 +90,16 @@ export function Navbar({
 
         {/* Right: Links + CTA */}
         <div className="flex items-center gap-2 md:gap-8">
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
+          <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-neutral-400">
             {[
               ['Home', '#', 'home'], 
+              ['Portfolio', '#portfolio', 'portfolio'],
+              ['3D Gallery', '#gallery', 'gallery'],
               ['Contact', '#signup', 'home']
             ].map(([item, href, pageKey]) => {
-              const isActive = (pageKey === 'gallery' && currentPage === 'gallery') || (pageKey === 'assets' && currentPage === 'assets') || (pageKey === 'home' && currentPage === 'home' && item !== 'Contact');
+              const isActive = (pageKey === 'gallery' && currentPage === 'gallery') || 
+                               (pageKey === 'portfolio' && currentPage === 'portfolio') || 
+                               (pageKey === 'home' && currentPage === 'home' && item !== 'Contact');
               return (
                 <a 
                   key={item} 
@@ -105,9 +114,9 @@ export function Navbar({
             })}
           </div>
           
-          {/* Mobile Menu Toggle */}
+          {/* Mobile/Tablet Menu Toggle */}
           <button 
-            className="md:hidden text-neutral-300 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+            className="lg:hidden text-neutral-300 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -123,22 +132,28 @@ export function Navbar({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden absolute top-full left-0 w-full mt-2 p-4 rounded-3xl bg-black/80 border border-white/10 backdrop-blur-2xl flex flex-col gap-2 shadow-2xl overflow-hidden"
+            className="lg:hidden absolute top-full left-0 w-full mt-2 p-4 rounded-3xl bg-black/95 border border-white/10 backdrop-blur-2xl flex flex-col gap-2 shadow-2xl overflow-hidden"
           >
             {[
-              ['Home', '#'], 
-              ['Contact', '#signup']
-            ].map(([item, href], i) => (
+              ['Home', '#', 'home'], 
+              ['Portfolio', '#portfolio', 'portfolio'],
+              ['3D Gallery', '#gallery', 'gallery'],
+              ['Contact', '#signup', 'home']
+            ].map(([item, href, pageKey], i) => (
               <motion.a 
                 key={item}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1 }}
+                transition={{ delay: i * 0.05 }}
                 href={href} 
                 onClick={(e) => handleLinkClick(e, item, href)}
-                className="text-neutral-300 hover:text-white text-base font-medium transition-colors px-6 py-4 rounded-xl hover:bg-white/10"
+                className={`text-base font-medium transition-colors px-6 py-4 rounded-xl flex items-center justify-between ${
+                  (pageKey === currentPage && item !== 'Contact') || (item === 'Contact' && currentPage === 'home' && window.location.hash === '#signup')
+                    ? 'text-white bg-white/10' 
+                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                }`}
               >
-                {item}
+                <span>{item}</span>
               </motion.a>
             ))}
           </motion.div>

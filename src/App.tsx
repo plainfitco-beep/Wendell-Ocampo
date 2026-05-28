@@ -12,9 +12,10 @@ import { SignupSection } from "@/components/ui/signup-section";
 import { Footer } from "@/components/ui/footer-section";
 import { ThreeDGalleryPage } from "@/components/ui/three-d-gallery";
 import { AssetsPage } from "@/components/ui/assets-page";
+import { PortfolioPage } from "@/components/ui/portfolio-page";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'gallery' | 'assets'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'gallery' | 'assets' | 'portfolio'>('home');
 
   // Automatically scroll to top on page switches to keep experience fluid
   useEffect(() => {
@@ -31,7 +32,11 @@ export default function App() {
 
       <Navbar currentPage={currentPage} onNavigate={setCurrentPage} />
       
-      {currentPage === 'gallery' ? (
+      {currentPage === 'portfolio' ? (
+        <div className="w-full pt-28 md:pt-36 relative z-10 flex-1">
+          <PortfolioPage />
+        </div>
+      ) : currentPage === 'gallery' ? (
         <div className="w-full pt-28 md:pt-36 relative z-10 flex-1">
           <ThreeDGalleryPage onBack={() => setCurrentPage('home')} />
         </div>
@@ -41,16 +46,16 @@ export default function App() {
         </div>
       ) : (
         <main className="w-full flex flex-col items-center relative z-10">
-          <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-40 md:pb-24">
+          <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 md:pt-36 pb-6">
             <SplineSceneBasic />
+          </div>
+          
+          <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+            <GallerySection onEnterShowroom={() => setCurrentPage('gallery')} />
           </div>
           
           <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <DemoOne />
-          </div>
-
-          <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-            <GallerySection onEnterShowroom={() => setCurrentPage('gallery')} />
           </div>
 
           <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
